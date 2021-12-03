@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSchaferwebdev</title>
+    <script src="./js/three.js"></script>   
+</head>
+
+<body>
+<script>
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+
+// Camera 
+    camera.position.z = 35;
+
+// Loading Manager
+    const loadingManager = new THREE.LoadingManager()
+
+
+// Textures
+
+const loadTextures = new THREE.TextureLoader()
+const wallTexture = loadTextures.load('./textures/brick_wall.jpg')
+const wallDef = loadTextures.load('./textures/brick_wall_roughness.jpg')
+
+
+// Wall materials
+
+const wallMaterial = new THREE.MeshBasicMaterial();
+    wallMaterial.map = wallTexture
+
+
+// Draw Scene 
+
+function animate() {
+        requestAnimationFrame( animate );
+        renderer.render( scene, camera );
+        }
+    animate();
+
+
+// Left wall
+
+    const largeWallLeft = new THREE.BoxGeometry(5, 30, 30);
+    const leftWall = new THREE.Mesh( largeWallLeft, wallMaterial );
+    scene.add( leftWall );
+
+    leftWall.position.x = -15
+
+
+// Right wall
+
+    const largeWallRight = new THREE.BoxGeometry(5, 30, 30);
+    const rightWall = new THREE.Mesh( largeWallRight, wallMaterial );
+    scene.add( rightWall );
+
+    rightWall.position.x= 20
+
+</script>
+</body>
+</html>
