@@ -9,12 +9,21 @@
 </head>
 
 <body>
+    <style>
+        * {
+            margin: 0;
+        }
+    </style>
+
 <script>
+console.log(THREE.OrbitControls)
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 const renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( renderer.domElement );
+
+    // Orbit controls
 
 
 // Camera 
@@ -23,21 +32,40 @@ const renderer = new THREE.WebGLRenderer();
 // Loading Manager
     const loadingManager = new THREE.LoadingManager()
 
-
 // Textures
 
 const loadTextures = new THREE.TextureLoader()
-const wallTexture = loadTextures.load('./textures/brick_wall.jpg')
-const wallDef = loadTextures.load('./textures/brick_wall_roughness.jpg')
+
+const wallColor = loadTextures.load('./textures/brick_wall.jpg')
+const wallRoughness = loadTextures.load('./textures/brick_wall_roughness.jpg')
+const wallDisplacement = loadTextures.load('./textures/brick_wall_displacement.png')
 
 
 // Wall materials
 
-const wallMaterial = new THREE.MeshBasicMaterial();
-    wallMaterial.map = wallTexture
+// const material = new THREE.MeshBasicMaterial({
+//     map: wallColor,
+// });
+    
+const material = new THREE.MeshStandardMaterial()
+material.map = wallColor
+material.displacementMap = wallDisplacement
+material.displacementScale = .05
+material.roughnessMap = wallRoughness
 
+//lights
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+scene.add(ambientLight)
+
+const pointLight = new THREE.PointLight(0xffffff, 0.5)
+pointLight.position.x = 2
+pointLight.position.y = 3
+pointLight.position.z = 4
+scene.add(pointLight)
 
 // Draw Scene 
+
 
 function animate() {
         requestAnimationFrame( animate );
@@ -48,8 +76,9 @@ function animate() {
 
 // Left wall
 
-    const largeWallLeft = new THREE.BoxGeometry(5, 30, 30);
-    const leftWall = new THREE.Mesh( largeWallLeft, wallMaterial );
+    const largeWall = new THREE.BoxGeometry(5, 30, 30, 100, 100);
+
+    const leftWall = new THREE.Mesh( largeWall, material );
     scene.add( leftWall );
 
     leftWall.position.x = -15
@@ -57,11 +86,13 @@ function animate() {
 
 // Right wall
 
-    const largeWallRight = new THREE.BoxGeometry(5, 30, 30);
-    const rightWall = new THREE.Mesh( largeWallRight, wallMaterial );
+    const rightWall = new THREE.Mesh( largeWall, material );
     scene.add( rightWall );
 
     rightWall.position.x= 20
+
+
+
 
 </script>
 </body>
